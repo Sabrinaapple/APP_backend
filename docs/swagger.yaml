@@ -1,0 +1,95 @@
+basePath: /
+definitions:
+  req.Login:
+    properties:
+      email:
+        description: Email user email
+        type: string
+      pwd:
+        description: Pwd user password
+        type: string
+    required:
+      - email
+      - pwd
+    type: object
+  res.Login:
+    properties:
+      id:
+        description: Id user id
+        type: integer
+      token:
+        description: Token user token
+        type: string
+    required:
+      - id
+      - token
+    type: object
+  res.Result-res_Login:
+    properties:
+      code:
+        description: Code response code
+        type: integer
+      data:
+        allOf:
+          - $ref: '#/definitions/res.Login'
+        description: Data response payload
+      msg:
+        description: Msg response msg
+        type: string
+    required:
+      - code
+      - msg
+    type: object
+  xerror.Error:
+    properties:
+      code:
+        type: integer
+      msg:
+        type: string
+    type: object
+host: localhost:9000
+info:
+  contact:
+    email: test@test.com
+    name: test
+  description: cms service api
+  title: CMS Service API
+  version: "1.0"
+paths:
+  /api/v1/user/login:
+    post:
+      consumes:
+        - application/json
+      description: user login
+      parameters:
+        - description: struct
+          in: body
+          name: data
+          required: true
+          schema:
+            $ref: '#/definitions/req.Login'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: '#/definitions/res.Result-res_Login'
+        "401":
+          description: request params format error
+          schema:
+            $ref: '#/definitions/xerror.Error'
+        "402":
+          description: request params validate error
+          schema:
+            $ref: '#/definitions/xerror.Error'
+      summary: user login
+      tags:
+        - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
+

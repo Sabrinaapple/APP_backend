@@ -1,0 +1,141 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "cms service api",
+    "title": "CMS Service API",
+    "contact": {
+      "name": "test",
+      "email": "test@test.com"
+    },
+    "version": "1.0"
+  },
+  "host": "localhost:9000",
+  "basePath": "/",
+  "paths": {
+    "/api/v1/user/login": {
+      "post": {
+        "description": "user login",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "user login",
+        "parameters": [
+          {
+            "description": "struct",
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/req.Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/res.Result-res_Login"
+            }
+          },
+          "401": {
+            "description": "request params format error",
+            "schema": {
+              "$ref": "#/definitions/xerror.Error"
+            }
+          },
+          "402": {
+            "description": "request params validate error",
+            "schema": {
+              "$ref": "#/definitions/xerror.Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "req.Login": {
+      "type": "object",
+      "required": [
+        "email",
+        "pwd"
+      ],
+      "properties": {
+        "email": {
+          "description": "Email user email",
+          "type": "string"
+        },
+        "pwd": {
+          "description": "Pwd user password",
+          "type": "string"
+        }
+      }
+    },
+    "res.Login": {
+      "type": "object",
+      "required": [
+        "id",
+        "token"
+      ],
+      "properties": {
+        "id": {
+          "description": "Id user id",
+          "type": "integer"
+        },
+        "token": {
+          "description": "Token user token",
+          "type": "string"
+        }
+      }
+    },
+    "res.Result-res_Login": {
+      "type": "object",
+      "required": [
+        "code",
+        "msg"
+      ],
+      "properties": {
+        "code": {
+          "description": "Code response code",
+          "type": "integer"
+        },
+        "data": {
+          "description": "Data response payload",
+          "allOf": [
+            {
+              "$ref": "#/definitions/res.Login"
+            }
+          ]
+        },
+        "msg": {
+          "description": "Msg response msg",
+          "type": "string"
+        }
+      }
+    },
+    "xerror.Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "msg": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
